@@ -1,0 +1,78 @@
+#' Visualize performances of different methods of microbial differential abundance analysis (DAA)
+#'
+#' `visualize_performances_barchart()` visualizes the proportion of significant taxon
+#' identified by three popular current methods of microbial differential abundance analysis,
+#' DESeq2, ANCOM-BC, and ALDEx2.
+#'
+#' @param daa_output a data frame containing the results of the three methods, for format refer
+#' to output from germseq::compare_DAA_methods()
+#'
+#' @returns A stacked barchart containing the proportion of Taxa found significantly different
+#' by the methods.
+#'
+#' @examples
+#' library(germseq)
+#' data("atlas1006_output")
+#' visualize_performances_barchart(atlas1006_output)
+#'
+#' @export
+visualize_performances_barchart <- function(daa_output) {
+
+  N <- nrow(daa_output)
+
+  # Modify data.frame for suitable input into ggplot
+  methods <- c(rep("aldex2", 2), rep("ancombc", 2), rep("deseq2", 2))
+  significance <- rep(c("Significant", "Not Significant"), 3)
+  value <- c(sum(res$aldex2), N - sum(res$aldex2),
+             sum(res$ancombc), N - sum(res$ancombc),
+             sum(res$deseq2), N- sum(res$deseq2))
+
+  graph_input <- data.frame(methods, significance, value)
+
+
+  pl <- ggplot2::ggplot(graph_input, aes(fill=significance, y=value, x=methods)) +
+    ggplot2::geom_bar(position="fill", stat="identity") +
+    ggplot2::ggtitle("Proportion of Taxa found Significantly Different \nbetween Conditions by Method") +
+    ggplot2::xlab("Methods") +
+    ggplot2::ylab("Proportion")
+
+  return(pl)
+}
+
+
+#' Visualize overlap between differential abundance analysis (DAA) method results
+#'
+#' `visualize_overlap_pichart()` visualizes the overlap between taxon found significant
+#' identified by three popular current methods of microbial differential abundance analysis,
+#' DESeq2, ANCOM-BC, and ALDEx2.
+#'
+#' @param daa_output a data frame containing the results of the three methods, for format refer
+#' to output from germseq::compare_DAA_methods()
+#'
+#' @returns A pichart containing the proportion of Taxa found significant by different
+#' numbers of methods.
+#'
+#' @examples
+#' library(germseq)
+#' data("atlas1006_output")
+#' visualize_overlap_pichart(atlas1006_output)
+#'
+#' @export
+visualize_overlap_pichart <- function(daa_output) {
+
+  N <- nrow(daa_output)
+  score_summ <- table(daa_output$score)
+
+  graph_input <- data.frame(method =  c("no methods", "one method",
+                                        "two methods", "all methods"),
+                            value = c(as.numeric(score_summ)))
+
+
+  pie <- ggplot2::ggplot(graph_input, aes(fill=method, y=value, x="")) +
+    ggplot2::geom_bar(width = 1, stat="identity") +
+    ggplot2::ggtitle("Summary of Number of Methods finding Taxa Significant") +
+    ggplot2::ylab("Proportion") +
+    coord_polar("y", start = 0)
+
+  return(pie)
+}
