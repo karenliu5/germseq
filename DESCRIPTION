@@ -2,8 +2,10 @@ Package: germseq
 Type: Package
 Title: What the Package Does (Title Case)
 Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
+Author: person("Karen", "Liu",
+                email = "karenq.liu@mail.utoronto.ca",
+                role = c("aut", "cre"))
+Maintainer: Karen Liu <karenq.liu@mail.utoronto.ca>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
 License: MIT + file LICENSE
@@ -11,3 +13,12 @@ Depends: R (>= 3.1.0)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    ALDEx2 (>= 1.22.0),
+    ANCOMBC (>= 1.0.5),
+    assertthat,
+    DESeq2 (>= 1.30.1),
+    phyloseq
