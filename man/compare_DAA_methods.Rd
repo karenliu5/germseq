@@ -2,29 +2,30 @@
 % Please edit documentation in R/compare_methods.R
 \name{compare_DAA_methods}
 \alias{compare_DAA_methods}
-\title{Compare methods of microbial differential abundance analysis (DAA)}
+\title{Compare methods of microbial differential abundance analysis (DAA) (R4.0.5)}
 \usage{
-compare_DAA_methods(ps, group, prev.thr = 0.1)
+compare_DAA_methods(ps, group, prevThr = 0.1)
 }
 \arguments{
 \item{ps}{a phyloseq object containing the data that is to be analyzed.}
 
 \item{group}{a string name of a binary variable to compare.}
 
-\item{prev.thr}{the prevalence threshold, between (0, 1]. Default value is 0.1}
+\item{prevThr}{the prevalence threshold, between (0, 1]. Default value is 0.1}
 }
 \value{
-A data frame containing whether each method found a statistically
-significant difference between the groups for each taxon.
+A data frame containing booleans indicating whether each method found
+a statistically significant difference between the groups for each taxon after
+adjusting for multiple hypotheses using FDR.
 }
 \description{
 `compare_DAA_methods()` applies three popular methods of DAA to a phyloseq object
-and returns a table with all three results
+and returns a table with all three results. Note that this only works with R4.0.5.
 }
 \examples{
 library(microbiome)
 data(atlas1006)
 atlas1006 <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
-compare_DAA_methods(ps = atlas1006, group = "bmi_group", prev.thr = 0.1)
+compare_DAA_methods(ps = atlas1006, group = "bmi_group", prevThr = 0.1)
 
 }
