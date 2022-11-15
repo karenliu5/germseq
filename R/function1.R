@@ -28,11 +28,13 @@ DifferencesFunction <- function(ps, group, prev.thr = 0.1){
   }
 
   #Automatically remove NAs
-  # num_NA <- sum(is.na(sample_data(ps)))
-  # if(num_NA > 0){
-  #   ps <- phyloseq::subset_samples(ps, )
-  #   return(ps)
-  # }
+  num_NA <- sum(is.na(sample_data(ps)[,ind]))
+  if(num_NA > 0){
+    var_values <- sample_data(ps)[[group]]
+    ps <- prune_samples(!is.na(var_values), ps)
+    warning("Warning: Rows with missing values were removed")
+    return(ps)
+  }
 
   #return()
   # if(num_NA > 0){
@@ -91,10 +93,11 @@ DifferencesFunction <- function(ps, group, prev.thr = 0.1){
 
 }
 
-#  library(microbiome)
-#  data(atlas1006)
-#  atlas1006 <- subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
-#  atlas1006 <- subset_samples(atlas1006, stats::complete.cases(sample_data(atlas1006)))
+# library(microbiome)
+# data(atlas1006)
+# sample_data(atlas1006)$bmi_group
+# atlas1006 <- subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
+# atlas1006 <- subset_samples(atlas1006, stats::complete.cases(sample_data(atlas1006)))
 # DifferencesFunction(atlas1006, "bmi_group")
 #
 # mask <- as.logical(microbiome::prevalence(atlas1006) > 0.1)
