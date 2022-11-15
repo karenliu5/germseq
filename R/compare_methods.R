@@ -1,7 +1,7 @@
 #' Compare methods of microbial differential abundance analysis (DAA)
 #'
 #' `compare_DAA_methods()` applies three popular methods of DAA to a phyloseq object
-#' and returns a table with all three results
+#' and returns a table with all three results. Note that this only works with R4.0.5.
 #'
 #' @param ps a phyloseq object containing the data that is to be analyzed.
 #' @param group a string name of a binary variable to compare.
@@ -101,7 +101,7 @@ compare_DAA_methods <- function(ps, group, prev.thr = 0.1){
 #' Compare methods of microbial differential abundance analysis (DAA)
 #'
 #' `compare_DAA_methods_2()` applies three popular methods of DAA to a phyloseq object
-#' and returns a table with all three results
+#' and returns a table with all three results. Updated for R4.2.2.
 #'
 #' @param ps a phyloseq object containing the data that is to be analyzed.
 #' @param group a string name of a binary variable to compare.
@@ -190,7 +190,7 @@ compare_DAA_methods_2 <- function(ps, group, prev.thr = 0.1){
                              denom = "iqlr")
 
   summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_da), aldex2 = (aldex2_da$wi.eBH < 0.05)),
-                           data.frame(taxon = row.names(ancombc_form$res$diff_abn), ancombc = ancombc_form$res$diff_abn[,1]), by = "taxon") %>%
+                           data.frame(taxon = ancombc_form$res$diff_abn$taxon, ancombc = ancombc_form$res$diff_abn[,3]), by = "taxon") %>%
     dplyr::full_join(data.frame(taxon = row.names(deseq2_res), deseq2 = deseq2_res$padj < 0.05), by="taxon")
 
   return(summ)
