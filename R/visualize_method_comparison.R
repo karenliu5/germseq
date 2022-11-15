@@ -16,6 +16,20 @@
 #' @export
 visualize_performances_barchart <- function(daa_output) {
 
+  graph_input <- get_graph_input1(daa_output)
+
+  # Create stacked barchart
+  pl <- ggplot2::ggplot(graph_input, aes(fill=significance, y=value, x=methods)) +
+    ggplot2::geom_bar(position="fill", stat="identity") +
+    ggplot2::ggtitle("Proportion of Taxa found Significantly Different \nbetween Conditions by Method") +
+    ggplot2::xlab("Methods") +
+    ggplot2::ylab("Proportion")
+
+  return(pl)
+}
+
+# Helper function for visualize_performances_barchart()
+get_graph_input1 <- function(daa_output){
   N <- nrow(daa_output)
 
   # Modify data.frame for suitable input into ggplot
@@ -27,16 +41,11 @@ visualize_performances_barchart <- function(daa_output) {
 
   graph_input <- data.frame(methods, significance, value)
 
-
-  # Create stacked barchart
-  pl <- ggplot2::ggplot(graph_input, aes(fill=significance, y=value, x=methods)) +
-    ggplot2::geom_bar(position="fill", stat="identity") +
-    ggplot2::ggtitle("Proportion of Taxa found Significantly Different \nbetween Conditions by Method") +
-    ggplot2::xlab("Methods") +
-    ggplot2::ylab("Proportion")
-
-  return(pl)
+  return(graph_input)
 }
+
+
+
 
 
 #' Visualize overlap between differential abundance analysis (DAA) method results
@@ -58,11 +67,7 @@ visualize_performances_barchart <- function(daa_output) {
 visualize_overlap_piechart <- function(daa_output) {
 
   # Modify data.frame for suitable input into ggplot
-  score_summ <- table(daa_output$score)
-
-  graph_input <- data.frame(method =  c("no methods", "one method",
-                                        "two methods", "all methods"),
-                            value = c(as.numeric(score_summ)))
+  graph_input <- get_graph_input2(daa_output)
 
   # Create pie chart
   pie <- ggplot2::ggplot(graph_input, aes(fill=method, y=value, x="")) +
@@ -73,3 +78,16 @@ visualize_overlap_piechart <- function(daa_output) {
 
   return(pie)
 }
+
+# Helper function for visualize_overlap_piechart()
+get_graph_input2 <- function(daa_output){
+  score_summ <- table(daa_output$score)
+
+  graph_input <- data.frame(method =  c("no methods", "one method",
+                         "two methods", "all methods"),
+             value = c(as.numeric(score_summ)))
+
+  return(graph_input)
+}
+
+# [END]
