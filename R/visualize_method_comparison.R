@@ -23,9 +23,9 @@ visualize_performances_barchart <- function(daa_output) {
   # Modify data.frame for suitable input into ggplot
   methods <- c(rep("aldex2", 2), rep("ancombc", 2), rep("deseq2", 2))
   significance <- rep(c("Significant", "Not Significant"), 3)
-  value <- c(sum(res$aldex2), N - sum(res$aldex2),
-             sum(res$ancombc), N - sum(res$ancombc),
-             sum(res$deseq2), N- sum(res$deseq2))
+  value <- c(sum(daa_output$aldex2), N - sum(daa_output$aldex2),
+             sum(daa_output$ancombc), N - sum(daa_output$ancombc),
+             sum(daa_output$deseq2), N- sum(daa_output$deseq2))
 
   graph_input <- data.frame(methods, significance, value)
 
