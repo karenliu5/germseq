@@ -1,73 +1,87 @@
-#' Compare methods of microbial differential abundance analysis (DAA)
+#' Compare methods of microbial differential abundance analysis (DAA) (R4.0.5)
 #'
 #' `compare_DAA_methods()` applies three popular methods of DAA to a phyloseq object
 #' and returns a table with all three results. Note that this only works with R4.0.5.
 #'
 #' @param ps a phyloseq object containing the data that is to be analyzed.
 #' @param group a string name of a binary variable to compare.
-#' @param prev.thr the prevalence threshold, between (0, 1]. Default value is 0.1
+#' @param prevThr the prevalence threshold, between (0, 1]. Default value is 0.1
 #'
-#' @returns A data frame containing whether each method found a statistically
-#' significant difference between the groups for each taxon.
+#' @returns A data frame containing booleans indicating whether each method found
+#' a statistically significant difference between the groups for each taxon after
+#' adjusting for multiple hypotheses using FDR.
 #'
 #' @examples
 #' library(microbiome)
 #' data(atlas1006)
 #' atlas1006 <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
-#' compare_DAA_methods(ps = atlas1006, group = "bmi_group", prev.thr = 0.1)
+#' compare_DAA_methods(ps = atlas1006, group = "bmi_group", prevThr = 0.1)
 #'
 #' @export
 #' @importFrom magrittr "%>%"
+compare_DAA_methods <- function(ps, group, prevThr = 0.1){
+  message("This function only works for R4.0.5. If using R4.2.2, please use compare_DAA_methods2.")
 
-compare_DAA_methods <- function(ps, group, prev.thr = 0.1){
-  # Check prev.thr
-  if(prev.thr >= 1 | prev.thr < 0){
-    stop("Error: prev.thr must be a number between [0, 1).")
-  }
 
-  # Check for Phyloseq object
+  # Check if inputs are valid
 
-  # Check if group is valid
-  if(! assertthat::is.string(group)){ # Group is a string
+  # Check if prevalence threshold, prevThr, is between 0 and 1.
+  if (prevThr >= 1 | prevThr < 0){
+    stop("Error: prevThr must be a number between [0, 1).")
+  } else {;}
+
+  # Check if group is a string
+  if (! assertthat::is.string(group)){ # Group is a string
     stop("Error: group must be a string.")
-  }
+  } else {;}
 
+  # Check if group is a valid variable to pass
   col_names <- colnames(phyloseq::sample_data(ps))
-  if(! (group %in% col_names)){
+  if (! (group %in% col_names)){
     stop("Error: group could not be found in phyloseq object.")
   } else {
     ind <- which(group == col_names)
   }
 
-  #Automatically remove NAs
-  num_NA <- sum(is.na(phyloseq::sample_data(ps)[,ind]))
-  if(num_NA > 0){
+  # Automatically remove NAs
+  num_NA <- sum(is.na(phyloseq::sample_data(ps)[ ,ind]))
+  if (num_NA > 0){
     var_values <- phyloseq::sample_data(ps)[[group]]
     ps <- phyloseq::prune_samples(!is.na(var_values), ps)
     warning("Warning: Rows with missing values were removed")
-  }
+  } else {;}
 
   # Check for two groups
-  if(nrow(unique(phyloseq::sample_data(ps)[,ind])) != 2){
+  if (nrow(unique(phyloseq::sample_data(ps)[ ,ind])) != 2){
     stop("Error: Make sure group takes only two values.")
-  }
+  } else {;}
 
-  # Preprocess Data
-  prevdf <- microbiome::prevalence(ps)
 
-  mask <- as.logical(prevdf > prev.thr)
-  keepTaxa <- names(prevdf[mask])
 
-  ps_filt <- phyloseq::prune_taxa(keepTaxa, ps)
+  # Apply prevalence filter to data
 
-  # DESeq2
+  prevdf <- microbiome::prevalence(ps) # Get prevalence
+
+  mask <- as.logical(prevdf > prevThr)
+  keepTaxa <- names(prevdf[mask]) # Identify taxa with prevalence higher than threshold
+
+  ps_filt <- phyloseq::prune_taxa(keepTaxa, ps) # Filter out taxa with prevalence lower than threshold
+
+
+  # Run analyses on data
+
+  message("Now running DESeq2")  # DESeq2
+
   form <- stats::as.formula(paste("~", group))
-  deseq2_format <- phyloseq::phyloseq_to_deseq2(ps_filt, form)
-  deseq2_format <- DESeq2::DESeq(deseq2_format, test = "Wald", fit="parametric")
-  deseq2_res <- DESeq2::results(deseq2_format)
 
-  # ANCOMBC
-  ancombc_form <- ANCOMBC::ancombc(
+  deseq2_format <- phyloseq::phyloseq_to_deseq2(ps_filt, form) %>% suppressMessages()
+  deseq2_format <- DESeq2::DESeq(deseq2_format, test = "Wald", fit="parametric") %>% suppressMessages()
+  deseq2_out <- DESeq2::results(deseq2_format)
+
+
+  message("Now running ANCOMBC")  # ANCOMBC
+
+  ancombc_out <- ANCOMBC::ancombc(
     phyloseq = ps_filt,
     formula = group,
     p_adj_method = "fdr",
@@ -81,31 +95,47 @@ compare_DAA_methods <- function(ps, group, prev.thr = 0.1){
     conserve = TRUE,
     alpha = 0.05,
     global = TRUE
-  )
+  ) %>% suppressMessages() %>% suppressWarnings()
 
-  # ALDEx2
-  aldex2_da <- ALDEx2::aldex(data.frame(phyloseq::otu_table(ps_filt)),
+
+  message("Now running ALDEx2") # ALDEx2
+
+  aldex2_out <- ALDEx2::aldex(data.frame(phyloseq::otu_table(ps_filt)),
                              phyloseq::sample_data(ps_filt)[[group]],
                              test = "t", effect = TRUE,
-                             denom = "iqlr")
+                             denom = "iqlr") %>% suppressMessages() %>% suppressWarnings()
 
-  summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_da), aldex2 = (aldex2_da$wi.eBH < 0.05)),
-                           data.frame(taxon = row.names(ancombc_form$res$diff_abn), ancombc = ancombc_form$res$diff_abn[,1]), by = "taxon") %>%
-    dplyr::full_join(data.frame(taxon = row.names(deseq2_res), deseq2 = deseq2_res$padj < 0.05), by="taxon")
+
+  # Creating final data.frame of results
+
+  message("Summarizing results")
+
+  summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_out),
+                                      aldex2 = (aldex2_out$wi.eBH < 0.05)),
+                           data.frame(taxon = row.names(ancombc_out$res$diff_abn),
+                                      ancombc = ancombc_out$res$diff_abn[,1]),
+                           by = "taxon") %>%
+    dplyr::full_join(data.frame(taxon = row.names(deseq2_out),
+                                deseq2 = deseq2_out$padj < 0.05),
+                     by="taxon") %>%
+    dplyr::mutate(score = rowSums(dplyr::across(c(aldex2, ancombc, deseq2))))
 
   return(summ)
 }
 
 
 
-#' Compare methods of microbial differential abundance analysis (DAA)
+
+
+
+#' Compare methods of microbial differential abundance analysis (DAA) (R4.2.2)
 #'
 #' `compare_DAA_methods_2()` applies three popular methods of DAA to a phyloseq object
 #' and returns a table with all three results. Updated for R4.2.2.
 #'
 #' @param ps a phyloseq object containing the data that is to be analyzed.
 #' @param group a string name of a binary variable to compare.
-#' @param prev.thr the prevalence threshold, between (0, 1]. Default value is 0.1
+#' @param prevThr the prevalence threshold, between (0, 1]. Default value is 0.1
 #'
 #' @returns A data frame containing whether each method found a statistically
 #' significant difference between the groups for each taxon.
@@ -114,60 +144,74 @@ compare_DAA_methods <- function(ps, group, prev.thr = 0.1){
 #' library(microbiome)
 #' data(atlas1006)
 #' atlas1006 <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
-#' compare_DAA_methods_2(ps = atlas1006, group = "bmi_group", prev.thr = 0.1)
+#' compare_DAA_methods_2(ps = atlas1006, group = "bmi_group", prevThr = 0.1)
 #'
 #' @export
 #' @importFrom magrittr "%>%"
+compare_DAA_methods_2 <- function(ps, group, prevThr = 0.1){
+  message("This function only works for R4.2.2. If using R4.0.5, please use compare_DAA_methods.")
 
-compare_DAA_methods_2 <- function(ps, group, prev.thr = 0.1){
-  # Check prev.thr
-  if(prev.thr >= 1 | prev.thr < 0){
-    stop("Error: prev.thr must be a number between [0, 1).")
-  }
 
-  # Check for Phyloseq object
+  # Check if inputs are valid
 
-  # Check if group is valid
-  if(! assertthat::is.string(group)){ # Group is a string
+  # Check if prevalence threshold, prevThr, is between 0 and 1.
+  if (prevThr >= 1 | prevThr < 0){
+    stop("Error: prevThr must be a number between [0, 1).")
+  } else {;}
+
+  # Check if group is a string
+  if (! assertthat::is.string(group)){ # Group is a string
     stop("Error: group must be a string.")
-  }
+  } else { ; }
 
+  # Check if group is a valid variable to pass
   col_names <- colnames(phyloseq::sample_data(ps))
-  if(! (group %in% col_names)){
+  if (! (group %in% col_names)){
     stop("Error: group could not be found in phyloseq object.")
   } else {
     ind <- which(group == col_names)
   }
 
-  #Automatically remove NAs
-  num_NA <- sum(is.na(phyloseq::sample_data(ps)[,ind]))
-  if(num_NA > 0){
+  # Automatically remove NAs
+  num_NA <- sum(is.na(phyloseq::sample_data(ps)[ ,ind]))
+  if (num_NA > 0){
     var_values <- phyloseq::sample_data(ps)[[group]]
     ps <- phyloseq::prune_samples(!is.na(var_values), ps)
     warning("Warning: Rows with missing values were removed")
-  }
+  } else { ; }
 
   # Check for two groups
-  if(nrow(unique(phyloseq::sample_data(ps)[,ind])) != 2){
+  if (nrow(unique(phyloseq::sample_data(ps)[ ,ind])) != 2){
     stop("Error: Make sure group takes only two values.")
-  }
+  } else { ; }
 
-  # Preprocess Data
-  prevdf <- microbiome::prevalence(ps)
 
-  mask <- as.logical(prevdf > prev.thr)
-  keepTaxa <- names(prevdf[mask])
 
-  ps_filt <- phyloseq::prune_taxa(keepTaxa, ps)
+  # Apply prevalence filter to data
 
-  # DESeq2
+  prevdf <- microbiome::prevalence(ps) # Get prevalence
+
+  mask <- as.logical(prevdf > prevThr)
+  keepTaxa <- names(prevdf[mask]) # Identify taxa with prevalence higher than threshold
+
+  ps_filt <- phyloseq::prune_taxa(keepTaxa, ps) # Filter out taxa with prevalence lower than threshold
+
+
+
+  # Run analyses on data
+
+  message("Now running DESeq2")  # DESeq2
+
   form <- stats::as.formula(paste("~", group))
-  deseq2_format <- phyloseq::phyloseq_to_deseq2(ps_filt, form)
-  deseq2_format <- DESeq2::DESeq(deseq2_format, test = "Wald", fit="parametric")
-  deseq2_res <- DESeq2::results(deseq2_format)
 
-  # ANCOMBC
-  ancombc_form <- ANCOMBC::ancombc(
+  deseq2_format <- phyloseq::phyloseq_to_deseq2(ps_filt, form) %>% suppressMessages()
+  deseq2_format <- DESeq2::DESeq(deseq2_format, test = "Wald", fit="parametric") %>% suppressMessages()
+  deseq2_out <- DESeq2::results(deseq2_format)
+
+
+  message("Now running ANCOMBC") # ANCOMBC
+
+  ancombc_out <- ANCOMBC::ancombc(
     data = ps_filt,
     formula = group,
     p_adj_method = "fdr",
@@ -181,19 +225,34 @@ compare_DAA_methods_2 <- function(ps, group, prev.thr = 0.1){
     conserve = TRUE,
     alpha = 0.05,
     global = TRUE
-  )
+  ) %>% suppressMessages() %>% suppressWarnings()
 
-  # ALDEx2
-  aldex2_da <- ALDEx2::aldex(data.frame(phyloseq::otu_table(ps_filt)),
+
+  message("Now running ALDEx2") # ALDEx2
+
+  aldex2_out <- ALDEx2::aldex(data.frame(phyloseq::otu_table(ps_filt)),
                              phyloseq::sample_data(ps_filt)[[group]],
                              test = "t", effect = TRUE,
-                             denom = "iqlr")
+                             denom = "iqlr") %>% suppressMessages() %>% suppressWarnings()
 
-  summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_da), aldex2 = (aldex2_da$wi.eBH < 0.05)),
-                           data.frame(taxon = ancombc_form$res$diff_abn$taxon, ancombc = ancombc_form$res$diff_abn[,3]), by = "taxon") %>%
-    dplyr::full_join(data.frame(taxon = row.names(deseq2_res), deseq2 = deseq2_res$padj < 0.05), by="taxon")
+
+
+  # Creating final data.frame of results
+
+  message("Summarizing results")
+
+  summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_out),
+                                      aldex2 = (aldex2_out$wi.eBH < 0.05)),
+                           data.frame(taxon = ancombc_out$res$diff_abn$taxon,
+                                      ancombc = ancombc_out$res$diff_abn[,3]),
+                           by = "taxon") %>%
+    dplyr::full_join(data.frame(taxon = row.names(deseq2_out),
+                                deseq2 = deseq2_out$padj < 0.05),
+                     by="taxon") %>%
+    dplyr::mutate(score = rowSums(dplyr::across(c(aldex2, ancombc, deseq2))))
 
   return(summ)
 }
 
 
+# [END]
