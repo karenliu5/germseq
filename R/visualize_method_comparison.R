@@ -13,6 +13,11 @@
 #' @examples
 #' visualize_performances_barchart(germseq::atlas1006_output)
 #'
+#' @references
+#' Wickham, H. (2022). ggplot2: Create Elegant Data
+#'Visualisations Using the Grammar of Graphics. R package version 3.4.0.
+#'\href{https://cran.r-project.org/web/packages/ggplot2/index.html}{Link}.
+#'
 #' @export
 visualize_performances_barchart <- function(daa_output) {
 
@@ -28,7 +33,13 @@ visualize_performances_barchart <- function(daa_output) {
   return(pl)
 }
 
-# Helper function for visualize_performances_barchart()
+#'
+#'Private Helper Function
+#'
+#' Process data into a suitable format for visualization with
+#' visualize_performances_barchart()
+#'
+#' @param daa_ouput A dataframe to visualize.
 get_graph_input1 <- function(daa_output){
   N <- nrow(daa_output)
 
@@ -79,7 +90,13 @@ visualize_overlap_piechart <- function(daa_output) {
   return(pie)
 }
 
-# Helper function for visualize_overlap_piechart()
+#'
+#'Private Helper Function
+#'
+#' Process data into a suitable format for visualization with
+#' visualize_overlap_piechart
+#'
+#' @param daa_ouput A dataframe to visualize.
 get_graph_input2 <- function(daa_output){
   score_summ <- table(daa_output$score)
 

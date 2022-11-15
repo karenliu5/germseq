@@ -1,18 +1,19 @@
 Package: germseq
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Compare Different Methods of Metagenomic Differential Abundance Analysis (DAA)
 Version: 0.1.0
-Author: person("Karen", "Liu",
+Author@R: person("Karen", "Liu",
                 email = "karenq.liu@mail.utoronto.ca",
                 role = c("aut", "cre"))
 Maintainer: Karen Liu <karenq.liu@mail.utoronto.ca>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Description: Automatically compute three popular methods of metagenomic differential abundance
+analysis (DESeq2, ANCOM-BC, ALDEx2) in order to conveniently compare the results.
 License: MIT + file LICENSE
 Depends: R (>= 3.1.0)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
+Roxygen: list(markdown = TRUE)
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

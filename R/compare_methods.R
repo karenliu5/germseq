@@ -17,7 +17,34 @@
 #' atlas1006 <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
 #' compare_DAA_methods(ps = atlas1006, group = "bmi_group", prevThr = 0.1)
 #'
-#' @export
+#'@references
+#'Gloor, G., Fernandes, A., Macklaim, J., Albert, A., Links, M., Quinn, T., Wu, J.R.,
+#'Wong, R.G., and B. Lieng (2013). ALDEx2: Analysis Of Differential Abundance Taking
+#'Sample Variation Into Account. R package version 1.30.0.
+#'\href{https://bioconductor.org/packages/release/bioc/html/ALDEx2.html}{Link}.
+#'
+#'Huang, L. (2020). ANCOMBC: Microbiome differential abudance and correlation
+#'analyses with bias correction. R package version 2.0.1.
+#'\href{https://www.bioconductor.org/packages/release/bioc/html/ANCOMBC.html}{Link}.
+#'
+#'Lahti, L. and S. Shetty (2019). microbiome: Microbiome Analytics. R package version
+#'1.20.0. \href{https://www.bioconductor.org/packages/release/bioc/html/microbiome.html}{Link}.
+#'
+#'Lahti, L., Shetty, S., Ernst, F.M. et al. (2021). Orchestrating Microbiome Analysis
+#'with Bioconductor. \href{microbiome.github.io/oma/}{Link}.
+#'
+#'Love, M., Huber, W., and S. Anders (2014). DESeq2: Differential gene expression
+#'analysis based on the negative binomial distribution. R package version 1.38.0.
+#'\href{https://bioconductor.org/packages/release/bioc/html/DESeq2.html}{Link}.
+#'
+#'McMurdle, P.J. and S. Holmes (2013). phyloseq: Handling and analysis of high-throughput
+#'microbiome census data. R package version 1.42.0.
+#'\href{https://www.bioconductor.org/packages/release/bioc/html/phyloseq.html}{Link}.
+#'
+#'Olberding, N. (2019). Introduction to the Statistical Analysis of Microbiome Data in R.
+#'\href{https://www.nicholas-ollberding.com/post/introduction-to-the-statistical-analysis-of-microbiome-data-in-r/}{Link}.
+#'
+#'@export
 #' @importFrom magrittr "%>%"
 compare_DAA_methods <- function(ps, group, prevThr = 0.1){
   message("This function only works for R4.0.5. If using R4.2.2, please use compare_DAA_methods2.")
@@ -145,6 +172,33 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
 #' data(atlas1006)
 #' atlas1006 <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
 #' compare_DAA_methods_2(ps = atlas1006, group = "bmi_group", prevThr = 0.1)
+#'
+#'#'@references
+#'Gloor, G., Fernandes, A., Macklaim, J., Albert, A., Links, M., Quinn, T., Wu, J.R.,
+#'Wong, R.G., and B. Lieng (2013). ALDEx2: Analysis Of Differential Abundance Taking
+#'Sample Variation Into Account. R package version 1.30.0.
+#'\href{https://bioconductor.org/packages/release/bioc/html/ALDEx2.html}{Link}.
+#'
+#'Huang, L. (2020). ANCOMBC: Microbiome differential abudance and correlation
+#'analyses with bias correction. R package version 2.0.1.
+#'\href{https://www.bioconductor.org/packages/release/bioc/html/ANCOMBC.html}{Link}.
+#'
+#'Lahti, L. and S. Shetty (2019). microbiome: Microbiome Analytics. R package version
+#'1.20.0. \href{https://www.bioconductor.org/packages/release/bioc/html/microbiome.html}{Link}.
+#'
+#'Lahti, L., Shetty, S., Ernst, F.M. et al. (2021). Orchestrating Microbiome Analysis
+#'with Bioconductor. \href{microbiome.github.io/oma/}{Link}.
+#'
+#'Love, M., Huber, W., and S. Anders (2014). DESeq2: Differential gene expression
+#'analysis based on the negative binomial distribution. R package version 1.38.0.
+#'\href{https://bioconductor.org/packages/release/bioc/html/DESeq2.html}{Link}.
+#'
+#'McMurdle, P.J. and S. Holmes (2013). phyloseq: Handling and analysis of high-throughput
+#'microbiome census data. R package version 1.42.0.
+#'\href{https://www.bioconductor.org/packages/release/bioc/html/phyloseq.html}{Link}.
+#'
+#'Olberding, N. (2019). Introduction to the Statistical Analysis of Microbiome Data in R.
+#'\href{https://www.nicholas-ollberding.com/post/introduction-to-the-statistical-analysis-of-microbiome-data-in-r/}{Link}.
 #'
 #' @export
 #' @importFrom magrittr "%>%"

@@ -6,5 +6,3 @@ test_that("graph input is correct", {
   expect_equal(sum(graph_val == EXPECTED_OUTPUT), 6)
   expect_equal(dim(graph_output), c(6,3))
 })
-
-
