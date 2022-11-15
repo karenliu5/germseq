@@ -1,0 +1,53 @@
+---
+title: "Introduction to germseq"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{germseq}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(germseq)
+```
+
+## Introduction
+`germseq` is an R package which was created to facilitate a convenient way in order to perform multiple methods of microbial differential abundance analysis (DAA). In particular, we employ three popular methods of analysis: DESeq2, ANCOM-BC, and ALDEx2. With the resulting output, we are able to compare and contrast the output of these methods and evaluate the robustness results.
+
+## Typical Workflow
+
+Here, we demonstrate a typical workflow with our package, germseq:
+
+### 1 - Clean data
+First, we must prepare the data that is to be analyzed. The analysis function of germseq accepts data in the phyloseq-class format. Thus, we will proceed with this tutorial using the `atlas1006` dataset (Lahti et al. 2015) from the `microbiome` package.
+
+```{r message=FALSE}
+library(microbiome)
+data(atlas1006)
+atlas1006
+```
+
+From this phyloseq object, notice that there are three tables: the OTU table, the sample data, and the taxonomy table. The experimental data is housed within the Sample Data module. 
+
+```{r message=FALSE}
+head(sample_data(atlas1006))
+```
+
+As currently the analysis performed by germseq can only compare between two different conditions, here we choose to compare the microbiome of individuals with `bmi_group = obese` and `bmi_group = lean`. Therefore, we subset the sample data table to only contain these two. We will use the `phyloseq` package's `subset_samples` function in order to reflect these changes across all three tables in the phyloseq object.
+
+```{r message=FALSE}
+atlas1006_bmi <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
+head(sample_data(atlas1006_bmi))
+```
+
+Thus, with this cleaned dataset, we will continue to the analysis portion.
+
+## 2 - Running the Analysis
+
