@@ -21,6 +21,16 @@ library(germseq)
 ## Introduction
 `germseq` is an R package which was created to facilitate a convenient way in order to perform multiple methods of microbial differential abundance analysis (DAA). In particular, we employ three popular methods of analysis: DESeq2, ANCOM-BC, and ALDEx2. With the resulting output, we are able to compare and contrast the output of these methods and evaluate the robustness results.
 
+### Installation
+
+To install this package, start R and enter:
+```{r eval=FALSE}
+require("devtools")
+devtools::install_github("karenliu5/germseq", build_vignettes = TRUE)
+library("germseq")
+```
+
+
 ## Typical Workflow
 
 Here, we demonstrate a typical workflow with our package, germseq:
@@ -43,11 +53,39 @@ head(sample_data(atlas1006))
 As currently the analysis performed by germseq can only compare between two different conditions, here we choose to compare the microbiome of individuals with `bmi_group = obese` and `bmi_group = lean`. Therefore, we subset the sample data table to only contain these two. We will use the `phyloseq` package's `subset_samples` function in order to reflect these changes across all three tables in the phyloseq object.
 
 ```{r message=FALSE}
-atlas1006_bmi <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" | bmi_group == "obese"))
+atlas1006_bmi <- phyloseq::subset_samples(atlas1006, (bmi_group == "lean" 
+                                                      | bmi_group == "obese"))
 head(sample_data(atlas1006_bmi))
 ```
 
 Thus, with this cleaned dataset, we will continue to the analysis portion.
 
 ## 2 - Running the Analysis
+In order to run the analysis, we will use the following commands based on the R version that is currently being employed: `compare_DAA_methods()` for R4.0.5 and `compare_DAA_methods_2()` for R4.2.2. These are identical in input and output, and were created due to original limitations during the package development. The parameters for these functions are the following: `ps` a phyloseq object containing the data to analyze, `group` a string refeerring to the grouping variable, `prevThr` the prevalence filter threshold of choice. For more details regarding how these functions work, consult the help documentation using `?compare_DAA_methods` and `? compare_DAA_methods_2`. 
 
+In our example, we use `atlas1006_bmi` as `ps`, `"bmi_group"` as `group`, and the default value of 0.1 as the `prevThr`:
+
+```{r}
+summ <- germseq::compare_DAA_methods(ps = atlas1006_bmi, group = "bmi_group", prevThr = 0.1)
+head(summ)
+```
+
+This will output a summary table containing whether each method found the abundance of each taxon (`taxon`) to be significantly different after adjusting for multiple hypotheses between the two grouping conditions (`aldex2`, `ancombc`, `deseq2`), as well as the number of methods which found the specific taxon to be significantly different (`score`). Using this summary table, we can finally proceed to the visualization step.
+
+
+## 3 - Visualization
+Here, we provide functions in order that takes the results from the previous analysis to visually compare: a) the proportion of taxon found to be significantly different between methods; and b) the proportion of taxon found to be significant by no methods vs. one method vs. two methods vs. all methods. The former provides a sense of the sensitivity of each method, and the latter provides a sense of the robustness of the analysis. 
+
+Thus, we can proceed with the analysis by performing the following.
+
+For a), the proportion of taxon found to be significantly different between methods:
+```{r}
+visualize_performances_barchart(summ)
+```
+
+For b), the proportion of taxon found to be significant by no methods vs. one method vs. two methods vs. all methods
+```{r}
+visualize_overlap_piechart(summ)
+```
+
+For additional help, please consult `?visualize_performances_barchart` and `?visualize_overlap_piechart`. 
