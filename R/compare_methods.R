@@ -90,7 +90,7 @@ compare_DAA_methods <- function(ps, group, prev.thr = 0.1){
                              denom = "iqlr")
 
   summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_da), aldex2 = (aldex2_da$wi.eBH < 0.05)),
-                           data.frame(taxon = row.names(ancombc_form$res$diff_abn), ancombc = ancombc_form$diff_abn[,1]), by = "taxon") %>%
+                           data.frame(taxon = row.names(ancombc_form$res$diff_abn), ancombc = ancombc_form$res$diff_abn[,1]), by = "taxon") %>%
     dplyr::full_join(data.frame(taxon = row.names(deseq2_res), deseq2 = deseq2_res$padj < 0.05), by="taxon")
 
   return(summ)
@@ -190,7 +190,7 @@ compare_DAA_methods_2 <- function(ps, group, prev.thr = 0.1){
                              denom = "iqlr")
 
   summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_da), aldex2 = (aldex2_da$wi.eBH < 0.05)),
-                           data.frame(taxon = row.names(ancombc_form$res$diff_abn), ancombc = ancombc_form$diff_abn[,1]), by = "taxon") %>%
+                           data.frame(taxon = row.names(ancombc_form$res$diff_abn), ancombc = ancombc_form$res$diff_abn[,1]), by = "taxon") %>%
     dplyr::full_join(data.frame(taxon = row.names(deseq2_res), deseq2 = deseq2_res$padj < 0.05), by="taxon")
 
   return(summ)
