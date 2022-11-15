@@ -21,4 +21,7 @@ Imports:
     ANCOMBC (>= 1.0.5),
     assertthat,
     DESeq2 (>= 1.30.1),
+    dplyr,
+    magrittr,
+    microbiome,
     phyloseq
