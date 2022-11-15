@@ -20,8 +20,6 @@ identified by three popular current methods of microbial differential abundance 
 DESeq2, ANCOM-BC, and ALDEx2.
 }
 \examples{
-library(germseq)
-data("atlas1006_output")
-visualize_performances_barchart(atlas1006_output)
+visualize_performances_barchart(germseq::atlas1006_output)
 
 }

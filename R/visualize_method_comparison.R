@@ -11,9 +11,7 @@
 #' by the methods.
 #'
 #' @examples
-#' library(germseq)
-#' data("atlas1006_output")
-#' visualize_performances_barchart(atlas1006_output)
+#' visualize_performances_barchart(germseq::atlas1006_output)
 #'
 #' @export
 visualize_performances_barchart <- function(daa_output) {
@@ -54,9 +52,7 @@ visualize_performances_barchart <- function(daa_output) {
 #' numbers of methods.
 #'
 #' @examples
-#' library(germseq)
-#' data("atlas1006_output")
-#' visualize_overlap_piechart(atlas1006_output)
+#' visualize_overlap_piechart(germseq::atlas1006_output)
 #'
 #' @export
 visualize_overlap_piechart <- function(daa_output) {
