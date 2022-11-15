@@ -24,4 +24,5 @@ Imports:
     dplyr,
     magrittr,
     microbiome,
-    phyloseq
+    phyloseq,
+    stats
