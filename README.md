@@ -85,6 +85,16 @@ browseVignettes("germseq")
 
 ## Contributions
 
+The author of this package is Karen Liu. The `compare_DAA_methods` and
+`compare_DAA_methods_2` functions use differential abundance analysis
+functions form `DESeq2`, `ANCOM-BC`, and `ALDEx2`, uses the `microbiome`
+package to calculate the prevalences, and uses functions from the
+`phyloseq` package to manipulate the data. The filtering of the taxon by
+the prevalence threshold and combining of the results into a data frame
+is implemented by the author. The `visualize_performances` and
+`visualize_overlap` functions are both implemented using the `ggplot2`
+package.
+
 ## References
 
 Gloor, G., Fernandes, A., Macklaim, J., Albert, A., Links, M., Quinn,
