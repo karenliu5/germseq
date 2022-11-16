@@ -2,6 +2,6 @@
 
 export(compare_DAA_methods)
 export(compare_DAA_methods_2)
-export(visualize_overlap_piechart)
-export(visualize_performances_barchart)
+export(visualize_overlap)
+export(visualize_performances)
 importFrom(magrittr,"%>%")
