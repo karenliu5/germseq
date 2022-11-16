@@ -7,7 +7,35 @@
 
 <!-- badges: end -->
 
-The goal of germseq is to …
+Compare Different Methods of Metagenomic Differential Abundance Analysis
+(DAA)
+
+## Description
+
+A healthy microbiome is an essential component of an individual’s
+health. In fact, studies have shown a correlation between differences in
+microbiota composition and various diseases (Vijay and Valdes 2022). As
+a result, it is not difficult to understand the need for software tools
+to understand how the microbiome changes between conditions. This has,
+however, proven to be a difficult task (Weiss et al. 2017), resulting in
+the development of several packages in order to facilitate metagenomic
+differential abundance analysis (DAA). However, a recent study has found
+that the results of these methods have been very inconsistent and the
+performance of each method varies with each dataset (Nearing et
+al. 2022), suggesting that a consensus approach might be taken before a
+robust method is found. Thus, this becomes a exhaustive task, especially
+when multiple conditions are to be tested.
+
+germseq is a package that implements this suggestion by taking three
+commonly used methods of DAA (DESeq2, ANCOM-BC, ALDEx2) and streamlining
+the analysis process by executing and comparing the results of these
+methods. Through its analysis and visualization functions, individuals
+are therefore able to quickly evaluate the sensitivity of each method as
+well as the robustness of the results.
+
+The germseq package was developed using R version 4.0.5 (2021-03-31),
+Platform: x86\_64-pc-linux-gnu (64-bit) and Running under: Ubuntu
+20.04.5 LTS.
 
 ## Installation
 
@@ -18,6 +46,8 @@ require("devtools")
 devtools::install_github("karenliu5/germseq", build_vignettes = TRUE)
 library("germseq")
 ```
+
+## Contributions
 
 ## References
 
@@ -50,12 +80,16 @@ high-throughput microbiome census data. R package version 1.42.0.
 
 Nearing, J.T., Douglas, G.M., Hayes, M.G., et al. (2022). Microbiome
 differential abundance methods produce different results across 38
-datasets. *Nature Comm.* 13(342).
+datasets. *Nature Comm* 13(342).
 [doi:\[https://doi.org/10.1038/s41467-022-28034-z](doi:%5Bhttps://doi.org/10.1038/s41467-022-28034-z)\](<https://doi.org/10.1038/s41467-022-28034-z>).
 
 Olberding, N. (2019). Introduction to the Statistical Analysis of
 Microbiome Data in R.
 <https://www.nicholas-ollberding.com/post/introduction-to-the-statistical-analysis-of-microbiome-data-in-r/>.
+
+Vijay, A. and A.M. Valdes (2022). Role of the gut microbiome in chronic
+diseases: a narrative review. *Eur J Clin Nutr* 76: 489-501.
+<https://doi.org/10.1038/s41430-021-00991-6>.
 
 ## Acknowledgements
 
