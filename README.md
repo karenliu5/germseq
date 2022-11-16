@@ -75,6 +75,8 @@ ANCOM-BC, and ALDEx2:
     proportion of taxon identified to be significantly different by no
     methods, one method, two methods, and three methods respectively.
 
+![](./inst/extdata/Liu_Karen_F1.png)
+
 For a tutorial of the package, please refer to the following vignette:
 
 ``` r
