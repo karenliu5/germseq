@@ -80,12 +80,12 @@ Thus, we can proceed with the analysis by performing the following.
 
 For a), the proportion of taxon found to be significantly different between methods:
 ```{r}
-visualize_performances_barchart(summ)
+visualize_performances(summ)
 ```
 
 For b), the proportion of taxon found to be significant by no methods vs. one method vs. two methods vs. all methods
 ```{r}
-visualize_overlap_piechart(summ)
+visualize_overlap(summ)
 ```
 
 For additional help, please consult `?visualize_performances_barchart` and `?visualize_overlap_piechart`. 

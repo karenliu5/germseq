@@ -1,6 +1,6 @@
 #' Visualize performances of different methods of microbial differential abundance analysis (DAA)
 #'
-#' `visualize_performances_barchart()` visualizes the proportion of significant taxon
+#' `visualize_performances()` visualizes the proportion of significant taxon
 #' identified by three popular current methods of microbial differential abundance analysis,
 #' DESeq2, ANCOM-BC, and ALDEx2.
 #'
@@ -11,7 +11,7 @@
 #' by the methods.
 #'
 #' @examples
-#' visualize_performances_barchart(germseq::atlas1006_output)
+#' visualize_performances(germseq::atlas1006_output)
 #'
 #' @references
 #' Wickham, H. (2022). ggplot2: Create Elegant Data
@@ -19,7 +19,7 @@
 #'\href{https://cran.r-project.org/web/packages/ggplot2/index.html}{Link}.
 #'
 #' @export
-visualize_performances_barchart <- function(daa_output) {
+visualize_performances <- function(daa_output) {
 
   graph_input <- get_graph_input1(daa_output)
 
@@ -37,7 +37,7 @@ visualize_performances_barchart <- function(daa_output) {
 #'Private Helper Function
 #'
 #' Process data into a suitable format for visualization with
-#' visualize_performances_barchart()
+#' visualize_performances()
 #'
 #' @param daa_ouput A dataframe to visualize.
 get_graph_input1 <- function(daa_output){
@@ -61,7 +61,7 @@ get_graph_input1 <- function(daa_output){
 
 #' Visualize overlap between differential abundance analysis (DAA) method results
 #'
-#' `visualize_overlap_piechart()` visualizes the overlap between taxon found significant
+#' `visualize_overlap()` visualizes the overlap between taxon found significant
 #' identified by three popular current methods of microbial differential abundance analysis,
 #' DESeq2, ANCOM-BC, and ALDEx2.
 #'
@@ -72,10 +72,10 @@ get_graph_input1 <- function(daa_output){
 #' numbers of methods.
 #'
 #' @examples
-#' visualize_overlap_piechart(germseq::atlas1006_output)
+#' visualize_overlap(germseq::atlas1006_output)
 #'
 #' @export
-visualize_overlap_piechart <- function(daa_output) {
+visualize_overlap <- function(daa_output) {
 
   # Modify data.frame for suitable input into ggplot
   graph_input <- get_graph_input2(daa_output)
@@ -94,7 +94,7 @@ visualize_overlap_piechart <- function(daa_output) {
 #'Private Helper Function
 #'
 #' Process data into a suitable format for visualization with
-#' visualize_overlap_piechart
+#' visualize_overlap
 #'
 #' @param daa_ouput A dataframe to visualize.
 get_graph_input2 <- function(daa_output){

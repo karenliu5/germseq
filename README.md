@@ -47,6 +47,26 @@ devtools::install_github("karenliu5/germseq", build_vignettes = TRUE)
 library("germseq")
 ```
 
+## Overview
+
+``` r
+ls("package:germseq")
+data(package = "germseq")
+```
+
+germseq provides three functions to evaluate the performance of DESeq2,
+ANCOM-BC, and ALDEx2:
+
+  - The `compare_DAA_methods` and `compare_DAA_methods_2` functions
+  - The `visualize_performances`
+  - The `visualize_overlap`
+
+For a tutorial of the package, please refer to the following vignette:
+
+``` r
+browseVignettes("germseq")
+```
+
 ## Contributions
 
 ## References
