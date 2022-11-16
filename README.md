@@ -57,9 +57,23 @@ data(package = "germseq")
 germseq provides three functions to evaluate the performance of DESeq2,
 ANCOM-BC, and ALDEx2:
 
-  - The `compare_DAA_methods` and `compare_DAA_methods_2` functions
-  - The `visualize_performances`
-  - The `visualize_overlap`
+  - The `compare_DAA_methods` (configured for R4.0.5) and
+    `compare_DAA_methods_2` (configured for R4.2.2.) functions will run
+    all three methods on the user-provided data, allowing the user to
+    specify the grouping variable and the prevalence threshold. It will
+    then output a table summarizing the results of the three methods.
+    These two functions are identical in input and output, and were
+    created due to software limitations during initial development.
+  - The `visualize_performances` function takes in the results
+    `compare_DAA_methods` (configured for R4.0.5) or
+    `compare_DAA_methods_2` and outputs a stacked barchart indicating
+    the proportion of taxon found significantly different between
+    conditions by each method.
+  - The `visualize_overlap` function takes in the results
+    `compare_DAA_methods` (configured for R4.0.5) or
+    `compare_DAA_methods_2` and outputs a pie chart indicating the
+    proportion of taxon identified to be significantly different by no
+    methods, one method, two methods, and three methods respectively.
 
 For a tutorial of the package, please refer to the following vignette:
 
