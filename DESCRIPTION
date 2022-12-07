@@ -9,7 +9,7 @@ Maintainer: Karen Liu <karenq.liu@mail.utoronto.ca>
 Description: Automatically compute three popular methods of metagenomic differential abundance
     analysis (DESeq2, ANCOM-BC, ALDEx2) in order to conveniently compare the results.
 License: MIT + file LICENSE
-Depends: R (>= 3.1.0)
+Depends: R (>= 4.0.5)
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.1
@@ -17,14 +17,14 @@ Roxygen: list(markdown = TRUE)
 Suggests: 
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat
 Config/testthat/edition: 3
 biocViews:
 Imports: 
-    ALDEx2 (>= 1.22.0),
-    ANCOMBC (>= 1.0.5),
+    ALDEx2,
+    ANCOMBC,
     assertthat,
-    DESeq2 (>= 1.30.1),
+    DESeq2,
     dplyr,
     ggplot2,
     magrittr,

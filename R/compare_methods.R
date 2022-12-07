@@ -170,7 +170,7 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
   summ <- cbind(summ, fisher_p = meta_fish_p)
 
   # Provide total number of DAA methods which found significance
-  summ <- summ %>% dplyr::mutate(rawcount = ((summ$aldex2 < 0.05)
+  summ <- cbind(summ, rawcount = ((summ$aldex2 < 0.05)
                                              + (summ$ancombc < 0.05)
                                              + (summ$deseq2 < 0.05)))
 
