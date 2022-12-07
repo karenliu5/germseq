@@ -108,21 +108,39 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
 
   message("Now running ANCOMBC")  # ANCOMBC
 
-  ancombc_out <- ANCOMBC::ancombc(
-    phyloseq = ps_filt,
-    formula = group,
-    p_adj_method = "fdr",
-    zero_cut = 1.0,
-    lib_cut = 0,
-    group = group,
-    struc_zero = TRUE,
-    neg_lb = TRUE,
-    tol = 1e-5,
-    max_iter = 100,
-    conserve = TRUE,
-    alpha = 0.05,
-    global = TRUE
-  ) %>% suppressMessages() %>% suppressWarnings()
+  if(R.version$major < 4 | R.version$minor < 2.0){ # Check for right version of R
+    ancombc_out <- ANCOMBC::ancombc(
+      phyloseq = ps_filt,
+      formula = group,
+      p_adj_method = "fdr",
+      zero_cut = 1.0,
+      lib_cut = 0,
+      group = group,
+      struc_zero = TRUE,
+      neg_lb = TRUE,
+      tol = 1e-5,
+      max_iter = 100,
+      conserve = TRUE,
+      alpha = 0.05,
+      global = TRUE
+    ) %>% suppressMessages() %>% suppressWarnings()
+  } else {
+    ancombc_out <- ANCOMBC::ancombc(
+      data = ps_filt,
+      formula = group,
+      p_adj_method = "fdr",
+      prv_cut = 0,
+      lib_cut = 0,
+      group = group,
+      struc_zero = TRUE,
+      neg_lb = TRUE,
+      tol = 1e-5,
+      max_iter = 100,
+      conserve = TRUE,
+      alpha = 0.05,
+      global = TRUE
+    ) %>% suppressMessages() %>% suppressWarnings()
+  }
 
 
   message("Now running ALDEx2") # ALDEx2
@@ -308,5 +326,12 @@ compare_DAA_methods_2 <- function(ps, group, prevThr = 0.1){
   return(summ)
 }
 
+
+version_test <- function(){
+  if(R.version$major < 4 | R.version$minor < 2.0){
+
+  }
+  return(R.version)
+}
 
 # [END]
