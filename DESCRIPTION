@@ -28,6 +28,7 @@ Imports:
     dplyr,
     ggplot2,
     magrittr,
+    metap,
     microbiome,
     phyloseq,
     stats

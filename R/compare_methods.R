@@ -155,17 +155,31 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
 
   message("Summarizing results")
 
+
+  # Extract Benjamini-Hochberg adjusted p-values
   summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_out),
-                                      aldex2 = (aldex2_out$wi.eBH < 0.05)),
-                           data.frame(taxon = row.names(ancombc_out$res$diff_abn),
-                                      ancombc = ancombc_out$res$diff_abn[,1]),
+                                      aldex2 = (aldex2_out$wi.eBH)),
+                           data.frame(taxon = row.names(ancombc_out$res$q_val),
+                                      ancombc = ancombc_out$res$q_val[,1]),
                            by = "taxon") %>%
     dplyr::full_join(data.frame(taxon = row.names(deseq2_out),
-                                deseq2 = deseq2_out$padj < 0.05),
-                     by="taxon") %>%
-    dplyr::mutate(score = rowSums(dplyr::across(c(aldex2, ancombc, deseq2))))
+                                deseq2 = deseq2_out$padj),
+                     by="taxon")
+
+  # Apply fisher method for meta-analysis of p-values
+  meta_fisher_out <- apply(summ[,2:4], 1, metap::sumlog)
+  meta_fish_p <- unlist(do.call(rbind, meta_fisher_out)[,3])
+  summ <- cbind(summ, fisher_p = meta_fish_p)
+
+  # Provide total number of DAA methods which found significance
+  summ <- summ %>% dplyr::mutate(rawcount = ((summ$aldex2 < 0.05)
+                                             + (summ$ancombc < 0.05)
+                                             + (summ$deseq2 < 0.05)))
 
   return(summ)
+
 }
+
+
 
 # [END]
