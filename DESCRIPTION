@@ -19,6 +19,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+biocViews:
 Imports: 
     ALDEx2 (>= 1.22.0),
     ANCOMBC (>= 1.0.5),
