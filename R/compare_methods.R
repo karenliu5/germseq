@@ -47,8 +47,6 @@
 #'@export
 #' @importFrom magrittr "%>%"
 compare_DAA_methods <- function(ps, group, prevThr = 0.1){
-  message("This function only works for R4.0.5. If using R4.2.2, please use compare_DAA_methods2.")
-
 
   # Check if inputs are valid
 
