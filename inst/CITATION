@@ -1,0 +1,12 @@
+citHeader("To cite germseq in publications use:")
+
+citEntry(entry = "Unpublished",
+  title        = "germseq: Compare Different Methods of Metagenomic Differential Abundance Analysis (DAA)",
+  author       = "Karen Liu",
+  note         = "Unpublished",
+  year         = "2022",
+
+  textVersion  =
+  paste("Liu, K. (2022) germseq: Compare Different Methods of Metagenomic Differential Abundance Analysis (DAA).
+        Unpublished. URL https://github.com/karenliu5/germseq.")
+)
