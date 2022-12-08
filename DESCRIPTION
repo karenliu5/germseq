@@ -34,6 +34,7 @@ Imports:
     phyloseq,
     plotly,
     shiny,
+    shinyalert,
     stats,
     tidyr,
     wesanderson

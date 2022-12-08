@@ -1,20 +1,35 @@
-
 library(shiny)
+library(shinyalert)
 
 ui <- fluidPage(
+
+  # Title
   titlePanel("Meta-Analysis of DAA using Fisher's Method"),
 
+  # Add sidebar layout containing input and output definitions ----
   sidebarLayout(
 
+    # Sidebar panel for inputs ----
     sidebarPanel(
+      br(),
+
+      tags$b("Example Datasets"),
+      tags$p("Adapted from the atlas1006 dataset from the R package, microbiome."),
+      tags$p("Lahti, L., Salojarvi, J., Salonen, A., Scheffer, M., and W. de Vos. (2014). Tipping elements in the human intestinal ecosystem. Nature Comm 5(4344). doi: https://doi.org/10.1038/ncomms5344."),
+      uiOutput("tab1"),
+      uiOutput("tab2"),
+      uiOutput("tab3"),
+
+      br(),
+
       fileInput(inputId = "otu",
-                label = "OTU Table",
+                label = "OTU table",
                 accept = c(".csv")),
       fileInput(inputId = "tax",
                 label = "Tax Table",
                 accept = c(".csv")),
       fileInput(inputId = "samp",
-                label = "Sample Table",
+                label = "Sample Data",
                 accept = c(".csv")),
       textInput(inputId = "group",
                 label = "variable of interest"),
@@ -125,6 +140,21 @@ server <- function(input, output) {
   output$bar <- plotly::renderPlotly({
     if(! is.null(startDAA))
       germseq::visualize_performances(daa_output = startDAA())
+  })
+
+  url1 <- a("Example OTU table", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  output$tab1 <- renderUI({
+    tagList("Download:", url1)
+  })
+
+  url2 <- a("Example tax table", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  output$tab2 <- renderUI({
+    tagList("Download:", url2)
+  })
+
+  url3 <- a("Example sample data", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  output$tab3 <- renderUI({
+    tagList("Download:", url3)
   })
 }
 
