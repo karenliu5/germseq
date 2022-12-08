@@ -142,7 +142,7 @@ server <- function(input, output) {
       germseq::visualize_performances(daa_output = startDAA())
   })
 
-  url1 <- a("Example OTU table", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  url1 <- a("Example OTU table", href="https://raw.githubusercontent.com/karenliu5/germseq/master/inst/extdata/atlas1006_otu.csv")
   output$tab1 <- renderUI({
     tagList("Download:", url1)
   })
@@ -152,7 +152,7 @@ server <- function(input, output) {
     tagList("Download:", url2)
   })
 
-  url3 <- a("Example sample data", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  url3 <- a("Example sample data", href="https://raw.githubusercontent.com/karenliu5/germseq/master/inst/extdata/atlas1006_tax.csv")
   output$tab3 <- renderUI({
     tagList("Download:", url3)
   })
