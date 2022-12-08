@@ -26,6 +26,7 @@ Imports:
     assertthat,
     DESeq2,
     dplyr,
+    DT,
     ggplot2,
     magrittr,
     metap,

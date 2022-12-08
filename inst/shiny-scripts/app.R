@@ -28,19 +28,29 @@ ui <- fluidPage(
       br(),
 
       actionButton(inputId = "button2",
-                   label = "Run")
+                   label = "Run"),
+
+      width = 3
 
     ),
 
     mainPanel(
       tabsetPanel(type = "tabs",
+                  tabPanel("Results",
+                           br(),
+                           DT::dataTableOutput("tab")),
                   tabPanel("Heat map",
-                           plotOutput("heatmap")),
+                           br(),
+                           plotly::plotlyOutput("heatmap")),
                   tabPanel("Raw plot for Pie",
-                           plotOutput("pie")),
+                           br(),
+                           plotly::plotlyOutput("pie")),
                   tabPanel("Bar chart",
-                           plotOutput("bar"))
-                  )
+                           br(),
+                           plotly::plotlyOutput("bar"))
+                  ),
+
+      width=8
     )
   )
 )
@@ -75,9 +85,9 @@ server <- function(input, output) {
 
   physeq <- eventReactive(eventExpr = input$button2, {
     phyloseq::phyloseq(
-      phyloseq::otu_table(otuInput),
-      phyloseq::tax_table(taxInput),
-      phyloseq::sample_data(sampInput))
+      phyloseq::otu_table(otuInput(), taxa_are_rows = TRUE),
+      phyloseq::tax_table(taxInput()),
+      phyloseq::sample_data(sampInput()))
   })
 
   groupInput <- eventReactive(eventExpr = input$button2, {
@@ -92,9 +102,29 @@ server <- function(input, output) {
 
   startDAA <- eventReactive(eventExpr = input$button2, {
     germseq::compare_DAA_methods(
-      ps = physeq,
-      group = groupInput,
-      prevThr = thrInput)
+      ps = physeq(),
+      group = groupInput(),
+      prevThr = thrInput())
+  })
+
+  output$tab <- DT::renderDataTable({
+    if(! is.null(startDAA))
+      startDAA()
+  })
+
+  output$heatmap <- plotly::renderPlotly({
+    if(! is.null(startDAA))
+      germseq::plot_result_heatmap(daa_output = startDAA()) %>% plotly::layout(height = 600)
+  })
+
+  output$pie <- plotly::renderPlotly({
+    if(! is.null(startDAA))
+      germseq::visualize_overlap(daa_output = startDAA())
+  })
+
+  output$bar <- plotly::renderPlotly({
+    if(! is.null(startDAA))
+      germseq::visualize_performances(daa_output = startDAA())
   })
 }
 

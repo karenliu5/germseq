@@ -84,7 +84,7 @@ visualize_overlap <- function(daa_output) {
   # Create pie chart
   pie <- ggplot2::ggplot(graph_input, aes(fill=method, y=value, x="")) +
     ggplot2::geom_bar(width = 1, stat="identity") +
-    ggplot2::scale_fill_manual(values = wesanderson::wes_palette("Darjeeling1")) +
+    ggplot2::scale_fill_manual(values = wesanderson::wes_palette("Royal1")) +
     ggplot2::ggtitle("Proportion of Taxon found Significant \nby Number of Methods") +
     ggplot2::ylab("Proportion") +
     ggplot2::coord_polar("y", start = 0)

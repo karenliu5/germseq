@@ -24,7 +24,7 @@ plot_result_heatmap <- function(daa_output){
   pal <- wesanderson::wes_palette("Zissou1", 50, type = "continuous")
 
   p <- heatmap_input %>%
-    ggplot2::ggplot(mapping = aes(x = taxon, y = method, fill = pval)) +
+    ggplot2::ggplot(mapping = aes(x = taxon, y = method, fill = pval, text=text)) +
     ggplot2::geom_tile() +
     ggplot2::scale_fill_gradientn(colours = c("black", pal),
                                   name = "-log10(p)",
