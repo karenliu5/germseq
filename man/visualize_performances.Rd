@@ -8,7 +8,7 @@ visualize_performances(daa_output)
 }
 \arguments{
 \item{daa_output}{a data frame containing the results of the three methods, for format refer
-to output from germseq::compare_DAA_methods()}
+to output from germseq::compare_DAA_methods() and germseq::atlas1006_output}
 }
 \value{
 A stacked barchart containing the proportion of Taxa found significantly different

@@ -5,7 +5,7 @@
 #' DESeq2, ANCOM-BC, and ALDEx2.
 #'
 #' @param daa_output a data frame containing the results of the three methods, for format refer
-#' to output from germseq::compare_DAA_methods()
+#' to output from germseq::compare_DAA_methods() and germseq::atlas1006_output
 #'
 #' @returns A stacked barchart containing the proportion of Taxa found significantly different
 #' by the methods.
@@ -46,9 +46,9 @@ get_graph_input1 <- function(daa_output){
   # Modify data.frame for suitable input into ggplot
   methods <- c(rep("aldex2", 2), rep("ancombc", 2), rep("deseq2", 2))
   significance <- rep(c("Significant", "Not Significant"), 3)
-  value <- c(sum(daa_output$aldex2), N - sum(daa_output$aldex2),
-             sum(daa_output$ancombc), N - sum(daa_output$ancombc),
-             sum(daa_output$deseq2), N- sum(daa_output$deseq2))
+  value <- c(sum(daa_output$aldex2 < 0.05), N - sum(daa_output$aldex2 < 0.05),
+             sum(daa_output$ancombc < 0.05), N - sum(daa_output$ancombc < 0.05),
+             sum(daa_output$deseq2 < 0.05), N- sum(daa_output$deseq2 < 0.05))
 
   graph_input <- data.frame(methods, significance, value)
 
@@ -98,7 +98,7 @@ visualize_overlap <- function(daa_output) {
 #'
 #' @param daa_ouput A dataframe to visualize.
 get_graph_input2 <- function(daa_output){
-  score_summ <- table(daa_output$score)
+  score_summ <- table(daa_output$rawcount)
 
   graph_input <- data.frame(method =  c("no methods", "one method",
                          "two methods", "all methods"),
@@ -106,5 +106,6 @@ get_graph_input2 <- function(daa_output){
 
   return(graph_input)
 }
+
 
 # [END]
