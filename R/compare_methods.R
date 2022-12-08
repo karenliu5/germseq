@@ -144,7 +144,7 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
     ancom_taxon <- ancombc_out$res$q_val[,1]
-    ancom_q <- ancombc_out$res$q_val[,3]
+    ancom_q <- c(ancombc_out$res$q_val[,3])
   }
 
   message("Now running ALDEx2") # ALDEx2
