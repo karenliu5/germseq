@@ -10,8 +10,10 @@ ui <- fluidPage(
 
     # Sidebar panel for inputs ----
     sidebarPanel(
+
       br(),
 
+      # Example Datasets ----
       tags$b("Example Datasets"),
       tags$p("Adapted from the atlas1006 dataset from the R package, microbiome."),
       tags$p("Lahti, L., Salojarvi, J., Salonen, A., Scheffer, M., and W. de Vos. (2014). Tipping elements in the human intestinal ecosystem. Nature Comm 5(4344). doi: https://doi.org/10.1038/ncomms5344."),
@@ -21,6 +23,7 @@ ui <- fluidPage(
 
       br(),
 
+      # Inputs ----
       fileInput(inputId = "otu",
                 label = "OTU table",
                 accept = c(".csv")),
@@ -146,7 +149,7 @@ server <- function(input, output) {
     tagList("Download:", url1)
   })
 
-  url2 <- a("Example tax table", href="https://raw.githubusercontent.com/anjalisilva/TestingPackage/master/inst/extdata/GeneCountsData2.csv")
+  url2 <- a("Example tax table", href="https://raw.githubusercontent.com/karenliu5/germseq/master/inst/extdata/atlas1006_samp.csv")
   output$tab2 <- renderUI({
     tagList("Download:", url2)
   })

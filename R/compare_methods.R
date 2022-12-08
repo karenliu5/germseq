@@ -122,6 +122,9 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       alpha = 0.05,
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
+
+    ancom_rownames <- row.names(ancombc_out$res$q_val)
+    ancom_q <- ancombc_out$res$q_val[,1]
   } else {
     ancombc_out <- ANCOMBC::ancombc(
       data = ps_filt,
@@ -138,6 +141,9 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       alpha = 0.05,
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
+
+    ancom_rownames <- row.names(ancombc_out$res$q)
+    ancom_q <- ancombc_out$res$q[,1]
   }
 
 
@@ -153,12 +159,11 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
 
   message("Summarizing results")
 
-
   # Extract Benjamini-Hochberg adjusted p-values
   summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_out),
                                       aldex2 = (aldex2_out$wi.eBH)),
-                           data.frame(taxon = row.names(ancombc_out$res$q_val),
-                                      ancombc = ancombc_out$res$q_val[,1]),
+                           data.frame(taxon = ancom_rownames,
+                                      ancombc = ancombc_q),
                            by = "taxon") %>%
     dplyr::full_join(data.frame(taxon = row.names(deseq2_out),
                                 deseq2 = deseq2_out$padj),
