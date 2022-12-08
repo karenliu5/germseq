@@ -29,9 +29,12 @@ when multiple conditions are to be tested.
 germseq is a package that implements this suggestion by taking three
 commonly used methods of DAA (DESeq2, ANCOM-BC, ALDEx2) and streamlining
 the analysis process by executing and comparing the results of these
-methods. Through its analysis and visualization functions, individuals
-are therefore able to quickly evaluate the sensitivity of each method as
-well as the robustness of the results.
+methods. Further, it uses Fisher’s method in order to perform the
+meta-analysis of these three methods in order to obtain a combined
+p-value. Through its analysis and visualization functions, individuals
+are therefore able to quickly evaluate the sensitivity and robustness of
+each method, as well as using the results of all three methods in order
+to determine significance.
 
 The germseq package was developed using R version 4.0.5 (2021-03-31),
 Platform: x86\_64-pc-linux-gnu (64-bit) and Running under: Ubuntu
@@ -47,6 +50,12 @@ devtools::install_github("karenliu5/germseq", build_vignettes = TRUE)
 library("germseq")
 ```
 
+To run the Shiny package:
+
+``` r
+runGermSeq()
+```
+
 ## Overview
 
 ``` r
@@ -57,25 +66,26 @@ data(package = "germseq")
 germseq provides three functions to evaluate the performance of DESeq2,
 ANCOM-BC, and ALDEx2:
 
-  - The `compare_DAA_methods` (configured for R4.0.5) and
-    `compare_DAA_methods_2` (configured for R4.2.2.) functions will run
-    all three methods on the user-provided data, allowing the user to
-    specify the grouping variable and the prevalence threshold. It will
-    then output a table summarizing the results of the three methods.
-    These two functions are identical in input and output, and were
-    created due to software limitations during initial development.
+  - The `compare_DAA_methods` functions will run all three methods on
+    the user-provided data, allowing the user to specify the grouping
+    variable and the prevalence threshold. It will then output a table
+    summarizing the results of the three methods, as well as the results
+    of Fisher’s meta-analysis.
   - The `visualize_performances` function takes in the results
-    `compare_DAA_methods` (configured for R4.0.5) or
-    `compare_DAA_methods_2` and outputs a stacked barchart indicating
-    the proportion of taxon found significantly different between
-    conditions by each method.
+    `compare_DAA_methods` and outputs an interactive stacked barchart
+    indicating the proportion of taxon found significantly different
+    between conditions by each method.
   - The `visualize_overlap` function takes in the results
-    `compare_DAA_methods` (configured for R4.0.5) or
-    `compare_DAA_methods_2` and outputs a pie chart indicating the
-    proportion of taxon identified to be significantly different by no
-    methods, one method, two methods, and three methods respectively.
+    `compare_DAA_methods` and outputs an interactive pie chart
+    indicating the proportion of taxon identified to be significantly
+    different by no methods, one method, two methods, and three methods
+    respectively.
+  - The `plot_result_heatmap` function takes in the results of
+    `compare_DAA_methods` and outputs a heatmap of the -log10(p) values
+    that result from all three methods of analysis and Fisher’s
+    meta-analysis.
 
-![](./inst/extdata/Liu_Karen_F1.png)
+![](./inst/extdata/Liu_Karen_F2.png)
 
 For a tutorial of the package, please refer to the following vignette:
 
@@ -85,17 +95,22 @@ browseVignettes("germseq")
 
 ## Contributions
 
-The author of this package is Karen Liu. The `compare_DAA_methods` and
-`compare_DAA_methods_2` functions use differential abundance analysis
-functions form `DESeq2`, `ANCOM-BC`, and `ALDEx2`, uses the `microbiome`
-package to calculate the prevalences, and uses functions from the
-`phyloseq` package to manipulate the data. The filtering of the taxon by
-the prevalence threshold and combining of the results into a data frame
-is implemented by the author. The `visualize_performances` and
-`visualize_overlap` functions are both implemented using the `ggplot2`
-package.
+The author of this package is Karen Liu. The `compare_DAA_methods`
+functions use differential abundance analysis functions form `DESeq2`,
+`ANCOM-BC`, and `ALDEx2`, uses the `microbiome` package to calculate the
+prevalences, and uses functions from the `phyloseq` package to
+manipulate the data. Further, the `metap` package is used in order to
+perform the Fisher’s meta-analysis. The filtering of the taxon by the
+prevalence threshold and combining of the results into a data frame is
+implemented by the author. The idea to use Fisher’s method to combine
+the results of the three methods of DAA is by the author. The
+`visualize_performances`, `plot_result_heatmap` and `visualize_overlap`
+functions are all implemented using the `ggplot2` and `plotly` packages.
 
 ## References
+
+Dewey, M. (2022). metap: Meta-Analysis of Significance Values. R package
+version 1.8. <https://cran.r-project.org/web/packages/metap/index.html>.
 
 Gloor, G., Fernandes, A., Macklaim, J., Albert, A., Links, M., Quinn,
 T., Wu, J.R., Wong, R.G., and B. Lieng (2013). ALDEx2: Analysis Of
@@ -103,9 +118,16 @@ Differential Abundance Taking Sample Variation Into Account. R package
 version 1.30.0.
 <https://bioconductor.org/packages/release/bioc/html/ALDEx2.html>.
 
+Grolemund, G. (2015). Learn Shiny - Video Tutorials.
+<https://shiny.rstudio.com/tutorial/>.
+
 Huang, L. (2020). ANCOMBC: Microbiome differential abudance and
 correlation analyses with bias correction. R package version 2.0.1.
 [https://www.bioconductor.org/packages/release/bioc/html/ANCOMBC.html](https://bioconductor.org/packages/release/bioc/html/ALDEx2.html).
+
+Lahti, L., Salojarvi, J., Salonen, A., Scheffer, M., and W. de Vos.
+(2014). Tipping elements in the human intestinal ecosystem. Nature Comm
+5(4344). doi: <https://doi.org/10.1038/ncomms5344>.
 
 Lahti, L. and S. Shetty (2019). microbiome: Microbiome Analytics. R
 package version 1.20.0.
@@ -133,9 +155,27 @@ Olberding, N. (2019). Introduction to the Statistical Analysis of
 Microbiome Data in R.
 <https://www.nicholas-ollberding.com/post/introduction-to-the-statistical-analysis-of-microbiome-data-in-r/>.
 
+R Core Team (2022). R: A language and environment for statistical
+computing. R Foundation for Statistical Computing, Vienna, Austria.
+<https://www.R-project.org/>
+
+Sievert, C. (2022). plotly: Create Interactive Web Graphics via
+‘plotly.js’. R package version 4.10.1.
+<https://cran.r-project.org/web/packages/plotly/index.html>.
+
+Silva, A. (2022) TestingPackage: An Example R Package For BCB410H.
+Unpublished. <https://github.com/anjalisilva/TestingPackage>.
+
 Vijay, A. and A.M. Valdes (2022). Role of the gut microbiome in chronic
 diseases: a narrative review. *Eur J Clin Nutr* 76: 489-501.
 <https://doi.org/10.1038/s41430-021-00991-6>.
+
+Wickham, H. and Bryan, J. (2019). R Packages (2nd edition). Newton,
+Massachusetts: O’Reilly Media. <https://r-pkgs.org/>
+
+Winkler, A.M. (2012). The logic of the Fisher method to combine
+P-values.
+<https://brainder.org/2012/05/11/the-logic-of-the-fisher-method-to-combine-p-values/>.
 
 ## Acknowledgements
 

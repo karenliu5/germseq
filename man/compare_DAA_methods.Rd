@@ -55,4 +55,7 @@ microbiome census data. R package version 1.42.0.
 
 Olberding, N. (2019). Introduction to the Statistical Analysis of Microbiome Data in R.
 \href{https://www.nicholas-ollberding.com/post/introduction-to-the-statistical-analysis-of-microbiome-data-in-r/}{Link}.
+
+Winkler, A.M. (2012). The logic of the Fisher method to combine P-values.
+\href{https://brainder.org/2012/05/11/the-logic-of-the-fisher-method-to-combine-p-values/}{Link}.
 }

@@ -23,3 +23,11 @@ to output from germseq::compare_DAA_methods() and germseq::atlas1006_output
 plot_result_heatmap(germseq::atlas1006_output)
 
 }
+\references{
+Dewey, M. (2022). metap: Meta-Analysis of Significance Values. R package version 1.8.
+\href{https://cran.r-project.org/web/packages/metap/index.html}{Link}.
+
+Wickham, H. (2022). ggplot2: Create Elegant Data
+Visualisations Using the Grammar of Graphics. R package version 3.4.0.
+\href{https://cran.r-project.org/web/packages/ggplot2/index.html}{Link}.
+}
