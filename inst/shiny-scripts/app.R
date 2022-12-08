@@ -1,5 +1,4 @@
 library(shiny)
-library(shinyalert)
 
 ui <- fluidPage(
 
