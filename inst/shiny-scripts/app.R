@@ -52,7 +52,8 @@ server <- function(input, output) {
       as.matrix(read.csv(input$otu$datapath,
                          sep = ",",
                          header = TRUE,
-                         row.names = 1))
+                         row.names = 1,
+                         check.names = FALSE))
   })
 
   taxInput <- eventReactive(eventExpr = input$button2, {
@@ -60,19 +61,23 @@ server <- function(input, output) {
       as.matrix(read.csv(input$tax$datapath,
                          sep = ",",
                          header = TRUE,
-                         row.names = 1))
+                         row.names = 1,
+                         check.names = FALSE))
   })
 
   sampInput <- eventReactive(eventExpr = input$button2, {
     if (! is.null(input$samp))
-      as.matrix(read.csv(input$samp$datapath,
+      read.csv(input$samp$datapath,
                          sep = ",",
                          header = TRUE,
-                         row.names = 1))
+                         row.names = 1)
   })
 
   physeq <- eventReactive(eventExpr = input$button2, {
-    phyloseq(otuInput, taxInput, sampInput)
+    phyloseq::phyloseq(
+      phyloseq::otu_table(otuInput),
+      phyloseq::tax_table(taxInput),
+      phyloseq::sample_data(sampInput))
   })
 
   groupInput <- eventReactive(eventExpr = input$button2, {
