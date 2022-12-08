@@ -34,5 +34,6 @@ Imports:
     plotly,
     shiny,
     stats,
-    tidyr
+    tidyr,
+    wesanderson
 VignetteBuilder: knitr

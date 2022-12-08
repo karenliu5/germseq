@@ -2,10 +2,10 @@
 % Please edit documentation in R/heatmap.R
 \name{plot_result_heatmap}
 \alias{plot_result_heatmap}
-\title{Heatmap}
+\title{Heatmap -log10(p)}
 \usage{
 plot_result_heatmap(daa_output)
 }
 \description{
-Heatmap
+Heatmap -log10(p)
 }
