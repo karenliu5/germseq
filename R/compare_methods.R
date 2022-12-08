@@ -128,8 +128,11 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       alpha = 0.05,
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
+
+    # Extract taxon and q-values
     ancom_taxon <- row.names(ancombc_out$res$q_val)
     ancom_q <- ancombc_out$res$q_val[,1]
+
   } else {
     ancombc_out <- ANCOMBC::ancombc(
       data = ps_filt,
@@ -146,6 +149,8 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       alpha = 0.05,
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
+
+    # Extract taxon and q-values
     ancom_taxon <- ancombc_out$res$q_val[,1]
     ancom_q <- c(ancombc_out$res$q_val[,3])
   }
