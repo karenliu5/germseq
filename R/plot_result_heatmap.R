@@ -1,6 +1,17 @@
 #' Visualize resulting p-values from differential abundance analysis (DAA) methods and meta-analysis using Fisher's method
 #'
-#' `plot_result_heatmap()` visualizes the -log(p-values) resulting
+#' `plot_result_heatmap()` visualizes the -log(p-values) resulting from three
+#' different methods of metagenomic DAA (DESeq2, ANCOM-BC, and ALDEx2), and their meta-analysis
+#' using Fisher's method.
+#'
+#'  @param daa_output a data frame containing the results of the three methods, for format refer
+#' to output from germseq::compare_DAA_methods() and germseq::atlas1006_output
+#'
+#' @returns An interactive heatmap containing the proportion of Taxa found significantly different
+#' by the methods.
+#'
+#' @examples
+#' plot_result_heatmap(germseq::atlas1006_output)
 #'
 #' @export
 #' @importFrom magrittr "%>%"

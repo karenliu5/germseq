@@ -11,7 +11,7 @@ visualize_overlap(daa_output)
 to output from germseq::compare_DAA_methods()}
 }
 \value{
-A pie chart containing the proportion of Taxa found significant by different
+An interactive pie chart containing the proportion of Taxa found significant by different
 numbers of methods.
 }
 \description{

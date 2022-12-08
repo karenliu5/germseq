@@ -11,7 +11,7 @@ visualize_performances(daa_output)
 to output from germseq::compare_DAA_methods() and germseq::atlas1006_output}
 }
 \value{
-A stacked barchart containing the proportion of Taxa found significantly different
+An interactive stacked barchart containing the proportion of Taxa found significantly different
 by the methods.
 }
 \description{

@@ -7,7 +7,7 @@
 #' @param daa_output a data frame containing the results of the three methods, for format refer
 #' to output from germseq::compare_DAA_methods() and germseq::atlas1006_output
 #'
-#' @returns A stacked barchart containing the proportion of Taxa found significantly different
+#' @returns An interactive stacked barchart containing the proportion of Taxa found significantly different
 #' by the methods.
 #'
 #' @examples
@@ -76,7 +76,7 @@ get_graph_input1 <- function(daa_output){
 #' @param daa_output a data frame containing the results of the three methods, for format refer
 #' to output from germseq::compare_DAA_methods()
 #'
-#' @returns A pie chart containing the proportion of Taxa found significant by different
+#' @returns An interactive pie chart containing the proportion of Taxa found significant by different
 #' numbers of methods.
 #'
 #' @examples

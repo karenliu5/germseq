@@ -2,10 +2,24 @@
 % Please edit documentation in R/plot_result_heatmap.R
 \name{plot_result_heatmap}
 \alias{plot_result_heatmap}
-\title{Heatmap -log10(p)}
+\title{Visualize resulting p-values from differential abundance analysis (DAA) methods and meta-analysis using Fisher's method}
 \usage{
 plot_result_heatmap(daa_output)
 }
+\value{
+An interactive heatmap containing the proportion of Taxa found significantly different
+by the methods.
+}
 \description{
-Heatmap -log10(p)
+\code{plot_result_heatmap()} visualizes the -log(p-values) resulting from three
+different methods of metagenomic DAA (DESeq2, ANCOM-BC, and ALDEx2), and their meta-analysis
+using Fisher's method.
+}
+\details{
+@param daa_output a data frame containing the results of the three methods, for format refer
+to output from germseq::compare_DAA_methods() and germseq::atlas1006_output
+}
+\examples{
+plot_result_heatmap(germseq::atlas1006_output)
+
 }
