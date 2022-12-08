@@ -1,3 +1,4 @@
+
 library(shiny)
 
 ui <- fluidPage(
@@ -44,6 +45,7 @@ ui <- fluidPage(
 
       br(),
 
+      # Run button ----
       actionButton(inputId = "button2",
                    label = "Run"),
 
@@ -51,18 +53,19 @@ ui <- fluidPage(
 
     ),
 
+    # Main panel for Output ----
     mainPanel(
       tabsetPanel(type = "tabs",
                   tabPanel("Results",
                            br(),
                            DT::dataTableOutput("tab")),
-                  tabPanel("Heat map",
+                  tabPanel("Heat Map of -Log10(p)",
                            br(),
                            plotly::plotlyOutput("heatmap")),
-                  tabPanel("Raw plot for Pie",
+                  tabPanel("Overlap between methods of DAA",
                            br(),
                            plotly::plotlyOutput("pie")),
-                  tabPanel("Bar chart",
+                  tabPanel("Performances of different methods of DAA",
                            br(),
                            plotly::plotlyOutput("bar"))
                   ),
@@ -72,8 +75,10 @@ ui <- fluidPage(
   )
 )
 
+# Server ----
 server <- function(input, output) {
 
+  # File input ----
   otuInput <- eventReactive(eventExpr = input$button2, {
     if (! is.null(input$otu))
       as.matrix(read.csv(input$otu$datapath,
@@ -100,6 +105,7 @@ server <- function(input, output) {
                          row.names = 1)
   })
 
+  # Create phyloseq object from file inputs ----
   physeq <- eventReactive(eventExpr = input$button2, {
     phyloseq::phyloseq(
       phyloseq::otu_table(otuInput(), taxa_are_rows = TRUE),
@@ -107,6 +113,7 @@ server <- function(input, output) {
       phyloseq::sample_data(sampInput()))
   })
 
+  # Input remaining variables (group and prevalence threshold) ----
   groupInput <- eventReactive(eventExpr = input$button2, {
     if(! is.null(input$group))
       input$group
@@ -117,6 +124,7 @@ server <- function(input, output) {
       input$prevThr
   })
 
+  # Start analysis ----
   startDAA <- eventReactive(eventExpr = input$button2, {
     germseq::compare_DAA_methods(
       ps = physeq(),
@@ -124,6 +132,7 @@ server <- function(input, output) {
       prevThr = thrInput())
   })
 
+  # Outputs ----
   output$tab <- DT::renderDataTable({
     if(! is.null(startDAA))
       startDAA()
@@ -144,6 +153,7 @@ server <- function(input, output) {
       germseq::visualize_performances(daa_output = startDAA())
   })
 
+  # URLs for example datasets ----
   url1 <- a("Example OTU table", href="https://raw.githubusercontent.com/karenliu5/germseq/master/inst/extdata/atlas1006_otu.csv")
   output$tab1 <- renderUI({
     tagList("Download:", url1)
