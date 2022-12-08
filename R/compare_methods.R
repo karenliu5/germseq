@@ -106,6 +106,9 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
 
   message("Now running ANCOMBC")  # ANCOMBC
 
+  ancom_taxon <- NULL
+  ancom_q <- NULL
+
   if(R.version$major < 4 | R.version$minor < 2.0){ # Check for right version of R
     ancombc_out <- ANCOMBC::ancombc(
       phyloseq = ps_filt,
@@ -122,7 +125,8 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       alpha = 0.05,
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
-
+    ancom_taxon <- row.names(ancombc_out$res$q_val)
+    ancom_q <- ancombc_out$res$q_val[,1]
   } else {
     ancombc_out <- ANCOMBC::ancombc(
       data = ps_filt,
@@ -139,6 +143,8 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
       alpha = 0.05,
       global = TRUE
     ) %>% suppressMessages() %>% suppressWarnings()
+    ancom_taxon <- ancombc_out$res$q_val[,1]
+    ancom_q <- ancombc_out$res$q_val[,3]
   }
 
   message("Now running ALDEx2") # ALDEx2
@@ -156,8 +162,8 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
   # Extract Benjamini-Hochberg adjusted p-values
   summ <- dplyr::full_join(data.frame(taxon = row.names(aldex2_out),
                                       aldex2 = (aldex2_out$wi.eBH)),
-                           data.frame(taxon = row.names(ancombc_out$res$q_val),
-                                      ancombc = ancombc_out$res$q_val[,1]),
+                           data.frame(taxon = ancom_taxon,
+                                      ancombc = ancom_q,
                            by = "taxon") %>%
     dplyr::full_join(data.frame(taxon = row.names(deseq2_out),
                                 deseq2 = deseq2_out$padj),

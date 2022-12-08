@@ -1,4 +1,7 @@
-#' Heatmap -log10(p)
+#' Visualize resulting p-values from differential abundance analysis (DAA) methods and meta-analysis using Fisher's method
+#'
+#' `plot_result_heatmap()` visualizes the -log(p-values) resulting
+#'
 #' @export
 #' @importFrom magrittr "%>%"
 plot_result_heatmap <- function(daa_output){
