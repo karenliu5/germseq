@@ -141,7 +141,6 @@ compare_DAA_methods <- function(ps, group, prevThr = 0.1){
     ) %>% suppressMessages() %>% suppressWarnings()
   }
 
-
   message("Now running ALDEx2") # ALDEx2
 
   aldex2_out <- ALDEx2::aldex(data.frame(phyloseq::otu_table(ps_filt)),

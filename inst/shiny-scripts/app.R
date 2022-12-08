@@ -25,13 +25,13 @@ ui <- fluidPage(
 
       # Inputs ----
       fileInput(inputId = "otu",
-                label = "OTU table",
+                label = "OTU table. Takes a .csv file. Rows are taxon and columns are samples. See Sample OTU table for example.",
                 accept = c(".csv")),
       fileInput(inputId = "tax",
-                label = "Tax Table",
+                label = "Tax Table. Takes a .csv file. Rows are taxon and columns are 'Phylum', 'Family', 'Genus'. See Sample tax table for example.",
                 accept = c(".csv")),
       fileInput(inputId = "samp",
-                label = "Sample Data",
+                label = "Sample Data.  Takes a .csv file. Rows are samples and columns are variables. See Sample sample data for example.",
                 accept = c(".csv")),
       textInput(inputId = "group",
                 label = "variable of interest"),
