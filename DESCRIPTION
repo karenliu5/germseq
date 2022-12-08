@@ -31,5 +31,6 @@ Imports:
     metap,
     microbiome,
     phyloseq,
+    shiny,
     stats
 VignetteBuilder: knitr
