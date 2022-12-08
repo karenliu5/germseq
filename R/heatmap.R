@@ -2,6 +2,7 @@
 #' @export
 #' @importFrom magrittr "%>%"
 plot_result_heatmap <- function(daa_output){
+
   daa_output <- daa_output %>%
     dplyr::mutate(
       deseq2 = -log10(deseq2),
@@ -21,12 +22,17 @@ plot_result_heatmap <- function(daa_output){
                          "p-value: ", -(pval^10), "\n",
                          "-log10(p): ", round(pval, 4)))
 
-  pal <- wesanderson::wes_palette("Zissou1", 100, type = "continuous")
+  pal <- wesanderson::wes_palette("Zissou1", 5, type = "continuous")
 
   p <- heatmap_input %>% ggplot2::ggplot(aes(x = taxon, y = method, fill = pval)) +
-    geom_tile() +
-    scale_fill_gradientn(colours = pal) +
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+    ggplot2::geom_tile() +
+    ggplot2::scale_fill_gradientn(colours = c("#000000", pal),
+                                  name = "-log10(p)",
+                                  limit = c(-log10(0.5),
+                                            min(30, max(heatmap_input$pval))),
+                                  oob=scales::squish) +
+    ggplot2::theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) +
+    ggplot2::ggtitle("-log10(p) for Each Method")
 
   p <- plotly::ggplotly(p, tooltip="text")
 

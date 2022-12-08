@@ -26,6 +26,7 @@ visualize_performances <- function(daa_output) {
   # Create stacked barchart
   pl <- ggplot2::ggplot(graph_input, aes(fill=significance, y=value, x=methods)) +
     ggplot2::geom_bar(position="fill", stat="identity") +
+    ggplot2::scale_fill_manual(values = wesanderson::wes_palette("Royal1")) +
     ggplot2::ggtitle("Proportion of Taxa found Significantly Different \nbetween Conditions by Method") +
     ggplot2::xlab("Methods") +
     ggplot2::ylab("Proportion")
@@ -83,9 +84,10 @@ visualize_overlap <- function(daa_output) {
   # Create pie chart
   pie <- ggplot2::ggplot(graph_input, aes(fill=method, y=value, x="")) +
     ggplot2::geom_bar(width = 1, stat="identity") +
+    ggplot2::scale_fill_manual(values = wesanderson::wes_palette("Darjeeling1")) +
     ggplot2::ggtitle("Proportion of Taxon found Significant \nby Number of Methods") +
     ggplot2::ylab("Proportion") +
-    coord_polar("y", start = 0)
+    ggplot2::coord_polar("y", start = 0)
 
   return(pie)
 }
