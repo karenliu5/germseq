@@ -66,26 +66,34 @@ In order to run the analysis, we will use the following commands based on the R 
 In our example, we use `atlas1006_bmi` as `ps`, `"bmi_group"` as `group`, and the default value of 0.1 as the `prevThr`:
 
 ```{r}
-#summ <- germseq::compare_DAA_methods(ps = atlas1006_bmi, group = "bmi_group", prevThr = 0.1)
-#head(summ)
+res <- compare_DAA_methods(ps = atlas1006_bmi, group = "bmi_group", prevThr = 0.1)
+head(res)
 ```
 
-This will output a summary table containing whether each method found the abundance of each taxon (`taxon`) to be significantly different after adjusting for multiple hypotheses between the two grouping conditions (`aldex2`, `ancombc`, `deseq2`), as well as the number of methods which found the specific taxon to be significantly different (`score`). Using this summary table, we can finally proceed to the visualization step.
+This will output a summary table containing whether each method found the abundance of each taxon (`taxon`) to be significantly different after adjusting for multiple hypotheses between the two grouping conditions (`aldex2`, `ancombc`, `deseq2`), as well as using fisher's method for the meta-analysis of these three methods (`fisher_p`). Finally, it will include the number of methods which found the specific taxon to be significantly different (`rawcount`). Using this summary table, we can finally proceed to the visualization step.
 
 
 ## 3 - Visualization
-Here, we provide functions in order that takes the results from the previous analysis to visually compare: a) the proportion of taxon found to be significantly different between methods; and b) the proportion of taxon found to be significant by no methods vs. one method vs. two methods vs. all methods. The former provides a sense of the sensitivity of each method, and the latter provides a sense of the robustness of the analysis. 
+Here, we provide functions in order that takes the results from the previous analysis to visually compare: a) the proportion of taxon found to be significantly different between methods; and b) the proportion of taxon found to be significant by no methods vs. one method vs. two methods vs. all methods, and c) a heatmap of the -log10(p) for each method and taxon combination. The former provides a sense of the sensitivity of each method, the middle provides a sense of the robustness of the analysis, and the latter provides an overall summary of the results in order to detect. 
 
 Thus, we can proceed with the analysis by performing the following.
 
 For a), the proportion of taxon found to be significantly different between methods:
 ```{r}
-#visualize_performances(summ)
+visualize_performances(res)
 ```
 
 For b), the proportion of taxon found to be significant by no methods vs. one method vs. two methods vs. all methods
 ```{r}
-#visualize_overlap(summ)
+visualize_overlap(res)
 ```
 
+For c), a heatmap of the -log10(p) for each method and taxon combination:
+```{r}
+plot_result_heatmap(res)
+```
 For additional help, please consult `?visualize_performances_barchart` and `?visualize_overlap_piechart`. 
+
+```{r}
+sessionInfo()
+```
